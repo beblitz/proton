@@ -2,6 +2,7 @@ import express from 'express';
 import HttpServer from 'http';
 import protonConfig from '../config/proton-config.js';
 import logger from '../utils/logger.js';
+import portResolver from '../utils/portResolver.js';
 
 export default class Server {
   private readonly express: express.Express;
@@ -11,13 +12,15 @@ export default class Server {
     this.express = express();
   }
 
-  public start(): void {
-    this.server = this.express.listen(protonConfig.port, () => {
+  public async start(): Promise<void> {
+    const port = await portResolver.getNextAvailablePort(protonConfig.port);
+
+    this.server = this.express.listen(port, () => {
       logger.imp(
         `Detected Proton Experimental v${protonConfig.proton.version}`
       );
       logger.info(
-        `Application ${protonConfig.application.name} started on port ${protonConfig.port}`
+        `Application ${protonConfig.application.name} started on port ${port}`
       );
     });
   }

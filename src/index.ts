@@ -1,5 +1,4 @@
-import Server from './core/Server.js';
+import 'reflect-metadata';
+import Application from './core/Application.js';
 
-const server = new Server();
-
-server.start();
+new Application();
