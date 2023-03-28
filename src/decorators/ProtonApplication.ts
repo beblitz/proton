@@ -1,6 +1,7 @@
 import protonConfig from '../config/proton-config.js';
 import Server from '../core/Server.js';
 import Container from '../utils/container.js';
+import scan from '../utils/scan.js';
 
 export default function ProtonApplication(application?: {
   name?: string;
@@ -8,38 +9,24 @@ export default function ProtonApplication(application?: {
 }) {
   return function (target: any): any {
     const server = new Server();
-    class Application extends target {
-      private server: Server;
-      private name: string;
-      private version: string;
 
+    scan(`${process.cwd()}`, '.controller.js');
+
+    class Application extends target {
       constructor(...args: any[]) {
         super(...args);
-        this.server = server;
-        this.name = application?.name || protonConfig.application.name;
-        this.version = application?.version || protonConfig.application.version;
-
-        this.start();
       }
 
-      public start(): void {
-        this.server.start();
+      public static start(): void {
+        server.start();
       }
 
-      public stop(): void {
-        this.server.stop();
+      public static stop(): void {
+        server.stop();
       }
 
-      public getName(): string {
-        return this.name;
-      }
-
-      public getVersion(): string {
-        return this.version;
-      }
-
-      public getServer(): Server {
-        return this.server;
+      public static getServer(): Server {
+        return server;
       }
     }
 

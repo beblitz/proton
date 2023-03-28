@@ -73,9 +73,7 @@ const readFile = file => {
 (async () => {
   try {
     await remove('lib');
-    await exec('tsc --build tsconfig.json', './').then(() => {
-      readDir('lib');
-    });
+    await exec('tsc --build tsconfig.json', './');
   } catch (err) {
     logger.err(err);
   }
