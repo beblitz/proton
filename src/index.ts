@@ -1,3 +1,5 @@
-import protonConfig from './config/proton-config.js';
+import Server from './core/Server.js';
 
-console.log(protonConfig);
+const server = new Server();
+
+server.start();

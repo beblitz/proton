@@ -10,7 +10,6 @@
     "moduleDetection": "auto",
     "declaration": true,
     "outDir": "lib",
-    "baseUrl": "./",
     "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
