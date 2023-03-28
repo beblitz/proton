@@ -1,0 +1,7 @@
+{
+  "verbose": true,
+  "cors": {
+    "origins": ["*"],
+    "maxAge": 3600
+  }
+}

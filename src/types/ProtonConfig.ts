@@ -1,10 +1,13 @@
-import CorsOptions from './CorsOptions';
-import Environment from './Environment';
+import CorsOptions from './CorsOptions.js';
+import Environment from './Environment.js';
 
 interface ProtonConfig {
   port?: number;
   verbose?: boolean;
-  helmet?: Environment[];
+  helmet?: {
+    enabled?: boolean;
+    environments?: Environment[];
+  };
   cors?: CorsOptions;
 }
 

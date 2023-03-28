@@ -1,3 +1,3 @@
-import protonSettings from './config/proton-settings';
+import protonConfig from './config/proton-config.js';
 
-console.log(protonSettings);
+console.log(protonConfig);
