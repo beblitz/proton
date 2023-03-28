@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es2017",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "baseUrl": "./",
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@Module/*": ["src/common/server/module/*"],
+      "@Core/*": ["src/common/core/*"],
+      "@Server/*": ["src/common/server/*"],
+      "@Interfaces/*": ["src/common/domain/interfaces/*"],
+      "@Common/*": ["src/common/*"],
+      "@Controller/*": ["src/controller/*"],
+      "@Database/*": ["src/database/*"],
+      "@Middleware/*": ["src/middleware/*"],
+      "@Model/*": ["src/model/*"],
+      "@Service/*": ["src/service/*"],
+      "@Types/*": ["src/common/domain/types/*"],
+      "@Utils/*": ["src/utils/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "**/*.test.ts"],
+  "exclude": ["node_modules", "dist", "src/**/*.spec.ts", "src/**/*.test.ts"]
+}
