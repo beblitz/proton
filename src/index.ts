@@ -1,5 +1,3 @@
-export * from './decorators/ProtonApplication';
-export * from './types/Application';
-export * from './types/ProtonConfig';
-export * from './types/CorsOptions';
-export * from './types/Environment';
+import ProtonApplication from './decorators/ProtonApplication';
+
+export default ProtonApplication;
