@@ -1,8 +1,8 @@
 import express from 'express';
 import HttpServer from 'http';
-import protonConfig from '../config/proton-config.js';
-import logger from '../utils/logger.js';
-import portResolver from '../utils/portResolver.js';
+import protonConfig from '../config/proton-config';
+import logger from '../utils/logger';
+import portResolver from '../utils/portResolver';
 
 export default class Server {
   private readonly express: express.Express;

@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "CommonJS",
+    "target": "es2021",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
-    "moduleDetection": "auto",
     "declaration": true,
     "outDir": "lib",
     "useUnknownInCatchVariables": false,

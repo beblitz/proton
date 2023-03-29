@@ -1,5 +1,5 @@
-import CorsOptions from './CorsOptions.js';
-import Environment from './Environment.js';
+import CorsOptions from './CorsOptions';
+import Environment from './Environment';
 
 interface ProtonConfig {
   application: {

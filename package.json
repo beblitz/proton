@@ -16,9 +16,8 @@
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "type": "module",
   "scripts": {
-    "build": "ts-node build.js",
+    "build": "ts-node build.ts",
     "start": "node lib/index.js",
     "test": "jest",
     "test:watch": "jest --watch",

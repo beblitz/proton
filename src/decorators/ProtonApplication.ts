@@ -1,8 +1,8 @@
-import protonConfig from '../config/proton-config.js';
-import Server from '../core/Server.js';
-import Application from '../types/Application.js';
-import Container from '../utils/container.js';
-import scan from '../utils/scan.js';
+import protonConfig from '../config/proton-config';
+import Server from '../core/Server';
+import Application from '../types/Application';
+import Container from '../utils/container';
+import scan from '../utils/scan';
 
 export default function ProtonApplication() {
   return function (target: any): typeof target {
@@ -10,7 +10,7 @@ export default function ProtonApplication() {
 
     (async () => {
       await server.start().then(() => {
-        scan(`${process.cwd()}`, '.controller.js');
+        scan(`${process.cwd()}`, '.controller');
       });
     })();
 

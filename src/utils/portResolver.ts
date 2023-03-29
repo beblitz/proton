@@ -1,5 +1,5 @@
 import net from 'net';
-import logger from './logger.js';
+import logger from './logger';
 
 const isPortTaken = (port: number): Promise<boolean> =>
   new Promise(resolve => {

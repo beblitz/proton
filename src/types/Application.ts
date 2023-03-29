@@ -1,5 +1,5 @@
-import Server from '../core/Server.js';
-import ProtonConfig from './ProtonConfig.js';
+import Server from '../core/Server';
+import ProtonConfig from './ProtonConfig';
 
 interface Application {
   config: ProtonConfig;
