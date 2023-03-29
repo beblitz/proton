@@ -1,16 +1,14 @@
 import protonConfig from '../config/proton-config';
 import Server from '../core/Server';
-import Application from '../types/Application';
 import Container from '../utils/container';
-import scan from '../utils/scan';
 
-export default function ProtonApplication() {
-  return function (target: any): typeof target {
+function ProtonApplication() {
+  return function (target: any): void {
     const server = new Server();
 
     (async () => {
       await server.start().then(() => {
-        scan(`${process.cwd()}`, '.controller');
+        // scan(`${process.cwd()}`, '.controller');
       });
     })();
 
@@ -31,7 +29,7 @@ export default function ProtonApplication() {
     });
 
     Container.set('app', app);
-
-    return app as Application;
   };
 }
+
+export default ProtonApplication;

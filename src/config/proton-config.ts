@@ -3,19 +3,19 @@ import path from 'path';
 import ProtonConfig from '../types/ProtonConfig';
 
 const settings: ProtonConfig = JSON.parse(
-  fs.readFileSync(path.resolve(process.cwd(), 'protonon'), 'utf8')
+  fs.readFileSync(path.resolve(process.cwd(), 'proton.json'), 'utf8')
 );
 
 const name = JSON.parse(
-  fs.readFileSync(path.resolve(process.cwd(), 'packageon'), 'utf8')
+  fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
 ).name;
 
 const version = JSON.parse(
-  fs.readFileSync(path.resolve(process.cwd(), 'packageon'), 'utf8')
+  fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
 ).version;
 
 const protonVersion = JSON.parse(
-  fs.readFileSync(path.resolve(path.resolve(), 'packageon'), 'utf8')
+  fs.readFileSync(path.resolve(path.resolve(), 'package.json'), 'utf8')
 ).version;
 
 export default {

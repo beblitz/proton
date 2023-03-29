@@ -1,3 +1,5 @@
-import ProtonApplication from './decorators/ProtonApplication';
+import 'reflect-metadata';
+import ProtonApplication from '../lib/decorators/ProtonApplication';
 
-export default ProtonApplication;
+@ProtonApplication()
+class App {}

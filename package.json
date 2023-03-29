@@ -1,7 +1,7 @@
 {
   "name": "@proton.io/experimental",
   "description": "A Node.js web service framework for building APIs and microservices.",
-  "version": "0.0.42",
+  "version": "0.0.50",
   "license": "MIT",
   "organization": {
     "name": "Blitz IT Solutions",
@@ -14,11 +14,23 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beblitz/proton"
+  },
   "scripts": {
+    "dev": "ts-node ./src/index.ts",
     "build": "ts-node build.ts",
-    "start": "node lib/index.js",
+    "start": "node ./lib/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
