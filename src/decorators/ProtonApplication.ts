@@ -1,35 +1,37 @@
 import protonConfig from '../config/proton-config.js';
 import Server from '../core/Server.js';
+import Application from '../types/Application.js';
 import Container from '../utils/container.js';
 import scan from '../utils/scan.js';
 
-export default function ProtonApplication(application?: {
-  name?: string;
-  version?: string;
-}) {
-  return function (target: any): any {
+export default function ProtonApplication() {
+  return function (target: any): typeof target {
     const server = new Server();
 
-    scan(`${process.cwd()}`, '.controller.js');
+    (async () => {
+      await server.start().then(() => {
+        scan(`${process.cwd()}`, '.controller.js');
+      });
+    })();
 
-    class Application extends target {
-      constructor(...args: any[]) {
-        super(...args);
-      }
+    const app = new target();
 
-      public static start(): void {
-        server.start();
-      }
+    Reflect.defineProperty(app, 'server', {
+      value: server,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
 
-      public static stop(): void {
-        server.stop();
-      }
+    Reflect.defineProperty(app, 'config', {
+      value: protonConfig,
+      writable: false,
+      enumerable: false,
+      configurable: false,
+    });
 
-      public static getServer(): Server {
-        return server;
-      }
-    }
+    Container.set('app', app);
 
-    return Application;
+    return app as Application;
   };
 }
