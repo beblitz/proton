@@ -6,27 +6,25 @@ function ProtonApplication() {
   return function (target: any): void {
     const server = new Server();
 
-    (async () => {
-      await server.start().then(() => {
-        // scan(`${process.cwd()}`, '.controller');
-      });
-    })();
-
     const app = new target();
 
-    Reflect.defineProperty(app, 'server', {
+    Reflect.defineProperty(app, 'proton:server', {
       value: server,
       writable: false,
       enumerable: false,
       configurable: false,
     });
 
-    Reflect.defineProperty(app, 'config', {
+    Reflect.defineProperty(app, 'proton:config', {
       value: protonConfig,
       writable: false,
       enumerable: false,
       configurable: false,
     });
+
+    app.start = async function (): Promise<void> {
+      await server.start();
+    };
 
     Container.set('app', app);
   };

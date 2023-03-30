@@ -1,5 +1,5 @@
 {
-  "name": "@proton.io/experimental",
+  "name": "proton",
   "description": "A Node.js web service framework for building APIs and microservices.",
   "version": "0.0.52",
   "license": "MIT",
