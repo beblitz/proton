@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "proton-experimental://config/schema.json",
+  "title": "Proton Experimental Workspace Configuration",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "$ref": "#/definitions/fileVersion"
+    },
+    "name": {
+      "type": "string"
+    },
+    "application": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "object",
+          "properties": {
+            "verbose": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "server": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "$ref": "#/definitions/port"
+            },
+            "middlewares": {
+              "type": "object",
+              "properties": {
+                "helmet": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "environments": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": ["development", "production", "test", "staging"]
+                      }
+                    }
+                  }
+                },
+                "morgan": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "environments": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": ["development", "production", "test", "staging"]
+                      }
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "cors": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "environments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["development", "production", "test", "staging"]
+                  }
+                },
+                "options": {
+                  "type": "object",
+                  "properties": {
+                    "origin": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "methods": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "allowedHeaders": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exposedHeaders": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "credentials": {
+                      "type": "boolean"
+                    },
+                    "maxAge": {
+                      "$ref": "#/definitions/preflightMaxAge"
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "definitions": {
+    "fileVersion": {
+      "type": "string",
+      "enum": ["1.0.0"]
+    },
+    "port": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 65535
+    },
+    "preflightMaxAge": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": ["version"]
+}

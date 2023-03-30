@@ -15,7 +15,7 @@ const version = JSON.parse(
 ).version;
 
 const protonVersion = JSON.parse(
-  fs.readFileSync(path.resolve(path.resolve(), 'package.json'), 'utf8')
+  fs.readFileSync(path.resolve(__dirname, '../../package.json'), 'utf8')
 ).version;
 
 export default {
