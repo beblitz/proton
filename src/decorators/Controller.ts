@@ -1,14 +1,14 @@
 import Server from '../core/Server';
-import { Next, Request, Response } from '../types';
 import Route from '../types/Route';
 import Container from '../utils/container';
-import registerDependencies from '../utils/registerDependencies';
+import loadMiddleware from '../utils/loadMiddleware';
+import loadRoute from '../utils/loadRoute';
 
-function Controller(basePath: string) {
-  return function (target: any) {
-    const routes: (Route & { status: number })[] = target.routes || [];
-
-    registerDependencies(target);
+const Controller = (basePath: string) => {
+  return (target: any) => {
+    Reflect.getMetadataKeys(target).forEach(key => {
+      target[key] = Reflect.getMetadata(key, target);
+    });
 
     if (!basePath.startsWith('/')) {
       basePath = `/${basePath}`;
@@ -17,34 +17,18 @@ function Controller(basePath: string) {
     target.init = () => {
       const server = Container.get<Server>('server');
 
-      routes.forEach(route => {
+      target.routes?.forEach((route: Route & { status: number }) => {
         if (route.path && !route.path.startsWith('/')) {
           route.path = `/${route.path}`;
         }
 
         route.path = `${basePath}${route.path || ''}`;
 
-        const originalHandler = route.handler.bind(target);
+        route = loadRoute(route, target);
 
-        route.handler = (req: Request, res: Response, next: Next) => {
-          try {
-            const response = originalHandler(req, res, next);
-
-            if (response instanceof Promise) {
-              response.then((data: any) => {
-                if (data) {
-                  res.status(route.status || 200).send(data);
-                }
-              });
-            } else {
-              res.status(route.status || 200).send(response);
-            }
-
-            next();
-          } catch (err) {
-            next(err);
-          }
-        };
+        route.middlewares = route.middlewares.map(middleware => {
+          return loadMiddleware(middleware);
+        });
 
         server.addRoute(route);
       });
@@ -52,6 +36,6 @@ function Controller(basePath: string) {
 
     return target;
   };
-}
+};
 
 export default Controller;

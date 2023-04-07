@@ -1,22 +1,17 @@
-import Container from './container';
-import logger from './logger';
+import Container from '../utils/container';
 
-const registerDependencies = (target: any) => {
-  const dependencies: string[] =
-    Reflect.getMetadata('dependencies', target) || [];
-
-  dependencies.forEach((dependency: string) => {
-    const [property, name] = dependency.split(':');
-
+const registerDependencies = (dependencies: any[], target: any) => {
+  dependencies.forEach(d => {
     try {
-      const service = Container.get(name);
+      const instance = Container.get(d);
 
-      target.prototype[property] = service;
-    } catch (e) {
-      logger.warn(
-        `Error while loading ${target.name}, it seems that the dependency ${name} is not registered, please check your dependency name and make sure that it have the @Service decorator.`
+      Object.defineProperty(target, instance['key'], {
+        get: () => instance,
+      });
+    } catch (err) {
+      throw new Error(
+        `Dependency ${d} not found. Please register it before using it.`
       );
-      throw new Error();
     }
   });
 };
