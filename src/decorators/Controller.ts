@@ -6,25 +6,27 @@ import loadRoute from '../utils/loadRoute';
 
 const Controller = (basePath: string) => {
   return (target: any) => {
+    const instance = new target();
+
     Reflect.getMetadataKeys(target).forEach(key => {
-      target[key] = Reflect.getMetadata(key, target);
+      instance[key] = Reflect.getMetadata(key, target);
     });
 
     if (!basePath.startsWith('/')) {
       basePath = `/${basePath}`;
     }
 
-    target.init = () => {
+    instance.init = () => {
       const server = Container.get<Server>('server');
 
-      target.routes?.forEach((route: Route & { status: number }) => {
+      instance.routes?.forEach((route: Route & { status: number }) => {
         if (route.path && !route.path.startsWith('/')) {
           route.path = `/${route.path}`;
         }
 
         route.path = `${basePath}${route.path || ''}`;
 
-        route = loadRoute(route, target);
+        route = loadRoute(route, instance);
 
         route.middlewares = route.middlewares.map(middleware => {
           return loadMiddleware(middleware);
@@ -34,7 +36,7 @@ const Controller = (basePath: string) => {
       });
     };
 
-    return target;
+    Container.set(target, instance);
   };
 };
 

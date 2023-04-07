@@ -21,13 +21,7 @@ interface ProtonConfig {
       };
       cors?: {
         enabled?: boolean;
-        environments?: {
-          all?: CorsOptions;
-          development?: CorsOptions;
-          production?: CorsOptions;
-          test?: CorsOptions;
-          staging?: CorsOptions;
-        };
+        options?: CorsOptions;
       };
     };
   };

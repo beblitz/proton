@@ -7,8 +7,6 @@ const loadMiddleware = (middleware: any) => {
   try {
     const _middleware = Container.get<Middleware>(middleware);
 
-    console.log('middleware', _middleware);
-
     const originalHandler = _middleware.execute.bind(_middleware);
 
     _middleware.execute = (req: Request, res: Response, next: Next) => {

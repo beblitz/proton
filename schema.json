@@ -80,25 +80,8 @@
                 "enabled": {
                   "type": "boolean"
                 },
-                "environments": {
-                  "type": "object",
-                  "properties": {
-                    "all": {
-                      "$ref": "#/definitions/corsOptions"
-                    },
-                    "development": {
-                      "$ref": "#/definitions/corsOptions"
-                    },
-                    "production": {
-                      "$ref": "#/definitions/corsOptions"
-                    },
-                    "test": {
-                      "$ref": "#/definitions/corsOptions"
-                    },
-                    "staging": {
-                      "$ref": "#/definitions/corsOptions"
-                    }
-                  }
+                "options": {
+                  "$ref": "#/definitions/corsOptions"
                 }
               },
               "additionalProperties": false

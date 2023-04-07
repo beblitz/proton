@@ -1,7 +1,8 @@
+import { Status } from '../enums';
 import Route, { Method } from '../types/Route';
 
 type Options = {
-  status?: number;
+  status?: Status;
   path?: string;
   middlewares?: unknown[];
 };

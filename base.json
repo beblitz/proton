@@ -21,15 +21,13 @@
       },
       "cors": {
         "enabled": true,
-        "environments": {
-          "all": {
-            "origins": ["*"],
-            "methods": ["GET", "POST", "PUT", "DELETE"],
-            "allowedHeaders": ["Content-Type", "Authorization"],
-            "exposedHeaders": ["Content-Range"],
-            "credentials": true,
-            "preflightMaxAge": 86400
-          }
+        "options": {
+          "origins": ["*"],
+          "methods": ["GET", "POST", "PUT", "DELETE"],
+          "allowedHeaders": ["Content-Type", "Authorization"],
+          "exposedHeaders": ["Content-Range"],
+          "credentials": true,
+          "preflightMaxAge": 86400
         }
       }
     }

@@ -1,5 +1,6 @@
 import { readdirSync, statSync } from 'fs-extra';
 import ProtonError from './ProtonError';
+import Container from '../utils/container';
 
 class Scanner {
   public static async scan(extension: string): Promise<void> {
@@ -44,8 +45,10 @@ class Scanner {
 
       await import(file)
         .then(_file => {
-          if (_file.default.init) {
-            _file.default.init();
+          const instance = Container.get(_file.default);
+
+          if (instance['init']) {
+            instance['init']();
           }
         })
         .catch(e => {
