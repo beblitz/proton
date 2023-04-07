@@ -1,66 +1,60 @@
 import { readdirSync, statSync } from 'fs-extra';
-import logger from '../utils/logger';
-import { container } from 'tsyringe';
+import ProtonError from './ProtonError';
 
 class Scanner {
-  public static modules: number;
-
-  public static async scan(path: string, extensions: string[]): Promise<void> {
-    logger.warn(`
-      Scanning for controllers, services and middlewares, please do not try to use the server until this process is finished.
-    `);
-
-    await this.readDir(path, extensions).then(() => {
-      logger.info(
-        `Finished scanning, ${this.modules} ${
-          this.modules > 1
-            ? 'modules'
-            : this.modules === 0
-            ? 'modules'
-            : 'module'
-        } were found.`
-      );
-    });
+  public static async scan(extension: string): Promise<void> {
+    await this.readDir(process.cwd(), extension);
   }
 
-  private static async readDir(
-    path: string,
-    extensions: string[]
-  ): Promise<void> {
-    readdirSync(path).forEach(file => {
-      const filePath = `${path}/${file}`;
-      const fileStat = statSync(filePath);
+  private static async readDir(path: string, extension: string): Promise<void> {
+    if (!path.includes('node_modules')) {
+      readdirSync(path).forEach(file => {
+        const filePath = `${path}/${file}`;
+        const fileStat = statSync(filePath);
 
-      if (fileStat.isDirectory()) {
-        this.readDir(filePath, extensions);
-      } else if (fileStat.isFile()) {
-        this.readFile(filePath, extensions);
-      }
-    });
+        if (fileStat.isDirectory()) {
+          this.readDir(filePath, extension);
+        } else if (fileStat.isFile()) {
+          this.readFile(filePath, extension);
+        }
+      });
+    }
   }
 
-  private static async readFile(
+  private static fileIsInTheRightDir(
     file: string,
-    extensions: string[]
-  ): Promise<void> {
-    extensions.map(extension => {
-      if (file.includes(extension)) {
-        import(file).then(file => {
-          try {
-            container.resolve(file.default);
-            if (file.default.load) {
-              file.default.load();
-            }
+    dir: string,
+    ext: string
+  ): boolean {
+    return (
+      file.endsWith(`.${ext}.js`) ||
+      (file.endsWith(`.${ext}.ts`) && dir === `${ext}s`)
+    );
+  }
 
-            this.modules++;
-          } catch (e) {
-            logger.err(`
-              Attempted to load ${file.default.name}, but it was not found in the container. Did you forget to register it?
-            `);
+  private static async readFile(file: string, ext: string): Promise<void> {
+    if (file.endsWith(`.${ext}.js`) || file.endsWith(`.${ext}.ts`)) {
+      const fileName = file.split('/').pop();
+      const dirName = file.split('/').slice(-2)[0];
+
+      ProtonError.throwIf(
+        !this.fileIsInTheRightDir(file, dirName, ext),
+        `File ${fileName} is in the wrong directory. It should be in the ${ext}s directory, so it'll be ignored. Please move it to the right directory.`
+      );
+
+      await import(file)
+        .then(_file => {
+          if (_file.default.init) {
+            _file.default.init();
           }
+        })
+        .catch(e => {
+          console.log(e);
+          ProtonError.throw(
+            `An error ocurred while attempting to load ${fileName}, so it'll be ignored. Are you sure that you exported the class correctly?`
+          );
         });
-      }
-    });
+    }
   }
 }
 

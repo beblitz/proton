@@ -1,9 +1,6 @@
 import cp from 'child_process';
 import fs from 'fs-extra';
-import { Formats, jetLogger, LoggerModes } from 'jet-logger';
-import path from 'path';
-
-const logger = jetLogger(LoggerModes.Console, '', false, false, Formats.Line);
+import logger from './logger';
 
 const remove = async (location: string): Promise<void> => {
   return new Promise((res, rej) => {
@@ -17,7 +14,7 @@ const exec = async (command: string, location: string): Promise<void> => {
   return new Promise((res, rej) => {
     return cp.exec(command, { cwd: location }, (err, stdout, stderr) => {
       if (err) {
-        logger.err(err);
+        logger.err(err.toString());
         return rej(err);
       }
       if (stdout) {
@@ -31,11 +28,7 @@ const exec = async (command: string, location: string): Promise<void> => {
   });
 };
 
-(async () => {
-  try {
-    await remove('lib');
-    await exec('tsc --build tsconfig.json', './');
-  } catch (err) {
-    logger.err(err);
-  }
-})();
+export default {
+  remove,
+  exec,
+} as const;

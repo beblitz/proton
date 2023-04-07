@@ -1,10 +1,10 @@
 interface CorsOptions {
-  origin?: string | string[];
-  methods?: string | string[];
-  allowedHeaders?: string | string[];
-  exposedHeaders?: string | string[];
+  origins?: string[];
+  methods?: string[];
+  allowedHeaders?: string[];
+  exposedHeaders?: string[];
   credentials?: boolean;
-  maxAge?: number;
+  preflightMaxAge?: number;
 }
 
 export default CorsOptions;

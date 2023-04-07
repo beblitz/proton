@@ -1,3 +1,4 @@
-import ProtonApplication from './ProtonApplication';
+import Controller from './Controller';
+import { Get, Patch, Delete, Post, Put } from './Route';
 
-export { ProtonApplication };
+export { Controller, Get, Patch, Delete, Post, Put };

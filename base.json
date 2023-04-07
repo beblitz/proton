@@ -1,0 +1,37 @@
+{
+  "$schema": "./schema.json",
+  "version": 1,
+  "application": {
+    "name": "{{name}}",
+    "protonVersion": "0.0.1",
+    "compiler": {
+      "verbose": true
+    },
+    "server": {
+      "port": 3000,
+      "middlewares": {
+        "helmet": {
+          "enabled": true,
+          "environments": ["production"]
+        },
+        "morgan": {
+          "enabled": true,
+          "environments": ["development"]
+        }
+      },
+      "cors": {
+        "enabled": true,
+        "environments": {
+          "all": {
+            "origins": ["*"],
+            "methods": ["GET", "POST", "PUT", "DELETE"],
+            "allowedHeaders": ["Content-Type", "Authorization"],
+            "exposedHeaders": ["Content-Range"],
+            "credentials": true,
+            "preflightMaxAge": 86400
+          }
+        }
+      }
+    }
+  }
+}

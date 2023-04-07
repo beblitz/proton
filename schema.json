@@ -19,7 +19,11 @@
         "name": {
           "type": "string"
         },
-        "runtime": {
+        "protonVersion": {
+          "type": "string",
+          "enum": ["0.0.1"]
+        },
+        "compiler": {
           "type": "object",
           "properties": {
             "verbose": {
@@ -77,44 +81,22 @@
                   "type": "boolean"
                 },
                 "environments": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": ["development", "production", "test", "staging"]
-                  }
-                },
-                "options": {
                   "type": "object",
                   "properties": {
-                    "origin": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                    "all": {
+                      "$ref": "#/definitions/corsOptions"
                     },
-                    "methods": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                    "development": {
+                      "$ref": "#/definitions/corsOptions"
                     },
-                    "allowedHeaders": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                    "production": {
+                      "$ref": "#/definitions/corsOptions"
                     },
-                    "exposedHeaders": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                    "test": {
+                      "$ref": "#/definitions/corsOptions"
                     },
-                    "credentials": {
-                      "type": "boolean"
-                    },
-                    "maxAge": {
-                      "$ref": "#/definitions/preflightMaxAge"
+                    "staging": {
+                      "$ref": "#/definitions/corsOptions"
                     }
                   }
                 }
@@ -130,8 +112,8 @@
   },
   "definitions": {
     "fileVersion": {
-      "type": "string",
-      "enum": ["1.0.0"]
+      "type": "number",
+      "enum": [1]
     },
     "port": {
       "type": "integer",
@@ -141,6 +123,30 @@
     "preflightMaxAge": {
       "type": "integer",
       "minimum": 0
+    },
+    "corsOptions": {
+      "type": "object",
+      "properties": {
+        "origins": {
+          "type": "array"
+        },
+        "methods": {
+          "type": "array"
+        },
+        "allowedHeaders": {
+          "type": "array"
+        },
+        "exposedHeaders": {
+          "type": "array"
+        },
+        "credentials": {
+          "type": "boolean"
+        },
+        "preflightMaxAge": {
+          "$ref": "#/definitions/preflightMaxAge"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,
