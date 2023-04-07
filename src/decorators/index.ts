@@ -4,6 +4,8 @@ import Middleware from './Middleware';
 import Execute from './Execute';
 import Use from './Use';
 import Service from './Service';
+import SocketController from './SocketController';
+import Event from './Event';
 
 export {
   Controller,
@@ -16,4 +18,6 @@ export {
   Execute,
   Use,
   Service,
+  SocketController,
+  Event,
 };

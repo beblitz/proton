@@ -18,9 +18,11 @@ const loadRoute = (route: Route & { status: number }, target: any) => {
         res.status(route.status || 200).send(response);
       }
 
-      next();
+      req.set('response', response);
+
+      return next();
     } catch (err) {
-      next(err);
+      return next(err);
     }
   };
 

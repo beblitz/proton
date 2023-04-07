@@ -1,18 +1,21 @@
+import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 import HttpServer from 'http';
+import morgan from 'morgan';
+import socket from 'socket.io';
+import { Status } from '../enums';
 import { ProtonConfig } from '../types';
 import Route from '../types/Route';
 import Container from '../utils/container';
+import errorHandler from '../utils/errorHandler';
 import logger from '../utils/logger';
 import portResolver from '../utils/portResolver';
-import errorHandler from '../utils/errorHandler';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import cors from 'cors';
-import { Status } from '../enums';
+import protonContext from '../utils/protonContext';
 
 export default class Server {
   private readonly express: express.Express;
+  private _io: socket.Server;
   private server: HttpServer.Server;
   private protonConfig: ProtonConfig;
 
@@ -48,17 +51,22 @@ export default class Server {
   }
 
   public addRoute(route: Route): void {
-    this.express[route.method](route.path, route.middlewares, route.handler);
+    this.express[route.method](
+      route.path,
+      route.middlewares,
+      route.handler,
+      errorHandler
+    );
 
     logger.info(`Route [${route.method.toUpperCase()}] ${route.path} added`);
   }
 
   private setup(): void {
     this.express.use(express.urlencoded({ extended: true }));
+    this.express.use(protonContext);
     this.express.use(express.json());
     this.express.use(express.raw());
     this.express.use(express.text());
-    this.express.use(errorHandler);
 
     if (this.protonConfig.application.server.middlewares.helmet.enabled) {
       this.protonConfig.application.server.middlewares.helmet.environments.map(
@@ -97,6 +105,29 @@ export default class Server {
           preflightContinue: false,
         })
       );
+
+      this._io = new socket.Server(this.server, {
+        cors: {
+          origin: corsOptions.origins,
+          methods: corsOptions.methods,
+          allowedHeaders: corsOptions.allowedHeaders,
+          credentials: corsOptions.credentials,
+          exposedHeaders: corsOptions.exposedHeaders,
+          maxAge: corsOptions.preflightMaxAge,
+        },
+        path: '/socket.io',
+      });
+    } else {
+      this._io = new socket.Server(this.server, {
+        path: '/socket.io',
+        cors: {
+          origin: '*',
+        },
+      });
     }
+  }
+
+  public get io(): socket.Server {
+    return this._io;
   }
 }

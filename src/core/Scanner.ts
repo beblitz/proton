@@ -43,20 +43,19 @@ class Scanner {
         `File ${fileName} is in the wrong directory. It should be in the ${ext}s directory, so it'll be ignored. Please move it to the right directory.`
       );
 
-      await import(file)
-        .then(_file => {
+      await import(file).then(_file => {
+        try {
           const instance = Container.get(_file.default);
 
           if (instance['init']) {
             instance['init']();
           }
-        })
-        .catch(e => {
-          console.log(e);
+        } catch (err) {
           ProtonError.throw(
             `An error ocurred while attempting to load ${fileName}, so it'll be ignored. Are you sure that you exported the class correctly?`
           );
-        });
+        }
+      });
     }
   }
 }

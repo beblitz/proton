@@ -1,3 +1,4 @@
+import { ProtonError } from '../core';
 import HttpError from '../errors/HttpError';
 import { Next, ProtonConfig, Request, Response } from '../types';
 import Container from './container';
@@ -9,18 +10,20 @@ const errorHandler = (
   res: Response,
   next: Next
 ) => {
-  if (err instanceof HttpError) {
-    const config: ProtonConfig = Container.get('config');
+  ProtonError.throwIf(
+    !(err instanceof HttpError),
+    'Proton needs an HttpError to handle the error properly, please check the documentation for more information.'
+  );
 
-    if (config.application.compiler.verbose) {
-      logger.err(err.toString());
-    }
+  const config: ProtonConfig = Container.get('config');
 
-    res.status(err.status).json(err.toJSON());
-    return next();
-  } else {
-    return next(err);
+  if (config.application.compiler.verbose) {
+    logger.err(err.toString());
   }
+
+  res.status(err.status).json(err.toJSON());
+
+  return next();
 };
 
 export default errorHandler;
